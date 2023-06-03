@@ -1,19 +1,28 @@
 from flask import Flask, request, render_template
+import sqlite3
 
 app = Flask(__name__)
-strings = []  # Store the received strings
-
-@app.route('/receive_string', methods=['POST'])
-def receive_string():
-    received_string = request.form.get('string')
-    strings.append(received_string)  # Store the received string
-    return 'String received successfully'
 
 @app.route('/')
 def index():
-    return render_template('index.html', strings=strings)  # Pass the stored strings to the template
+
+    conn = sqlite3.connect("workers.db")
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM workers")
+    data = c.fetchall()
+
+    conn.close()
+
+    html = "<h1>RFID Card Data</h1>"
+    html += "<table><tr><th>ID</th><th>Class</th></tr>"
+    for row in data:
+        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td></tr>"
+    html += "</table>"
+
+    return html
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=8080)
 
