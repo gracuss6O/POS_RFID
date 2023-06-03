@@ -9,46 +9,63 @@ conn = sqlite3.connect("workers.db")
 c = conn.cursor()
 
 c.execute('''CREATE TABLE IF NOT EXISTS workers
-             (idcard TEXT, sala TEXT)''')
+             (imie TEXT, nazwisko TEXT, idcard TEXT, sala TEXT)''')
 
 conn.commit()
 conn.close()
 
-def send_string_to_web_app(idcard, sala):
+def send_string_to_web_app(imie, nazwisko, idcard, sala):
     url = 'http://localhost:8080'
     data = {
+        'imie':imie,
+        'nazwisko':nazwisko,
         'idcard': idcard,
         'sala': sala,
             }
     response = requests.post(url, data=data)
-    print(response.text)  
+    print(response.text)
 
 def pierwszyprzycisk():
 
     def send_string():
-
+        imie =entryimie.get()
+        nazwisko =entrynazwisko.get()
         idcard = entryid.get()
         sala = entrysala.get()
-        send_string_to_web_app(idcard, sala)
+        send_string_to_web_app(imie, nazwisko,idcard, sala)
 
         conn = sqlite3.connect("workers.db")
         c = conn.cursor()
-        c.execute("INSERT INTO workers (idcard, sala) VALUES (?, ?)", (idcard, sala))
+        c.execute("INSERT INTO workers (imie, nazwisko, idcard, sala) VALUES (?, ?, ?, ?)", (imie, nazwisko, idcard, sala))
         conn.commit()
         conn.close()
 
-        idcard.delete(0, tk.END)
-        sala.delete(0, tk.END)
+
+        entryimie.delete(0, tk.END)
+        entrynazwisko.delete(0, tk.END)
+        entryid.delete(0, tk.END)
+        entrysala.delete(0, tk.END)
 
 
     top = Toplevel()
-    top.title("wprowdzanie danych")
+    top.title("Wprowdzanie danych")
     top.geometry("640x480")
 
 
-    myLabel = Label(top, text=" Wprowadz dane swojej karty ")
+    myLabel = Label(top, text=" Wprowadz dane.")
     myLabel.pack()
-    labelid=Label(top, text="ID: (format=XXXXYY, gdzie X- litera, Y-cyfra) ")
+    #imie
+    labelimie = Label(top, text="Imie:")
+    labelimie.pack()
+    entryimie = tk.Entry(top)
+    entryimie.pack()
+    #nazwisko
+    labelnazwisko = Label(top, text="Nazwisko:")
+    labelnazwisko.pack()
+    entrynazwisko = tk.Entry(top)
+    entrynazwisko.pack()
+    #id karty
+    labelid=Label(top, text="ID:")
     labelid.pack()
     entryid = tk.Entry(top)
     entryid.pack()
