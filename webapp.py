@@ -11,7 +11,7 @@ def base():
 @app.route('/baza', methods=['GET', 'POST'])
 def index():
 
-    conn = sqlite3.connect("workers.db")
+    conn = sqlite3.connect("workers.db")## zmiana na logi
     c = conn.cursor()
 
     c.execute("SELECT * FROM workers")
@@ -90,6 +90,25 @@ def admin_page():
     conn.close()
 
     return render_template('adminpage.html', records=records)
+##nowe zmiany, w logach widoczne tylko wpisy z desktopapp
+@app.route('/logi', methods=['GET', 'POST'])
+def logi():
+
+    conn = sqlite3.connect("logi.db")
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM logi")
+    data = c.fetchall()
+
+    conn.close()
+
+    html = "<h1> logi wprowadzonych kart RFID </h1>" ## dodane date
+    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th></tr><th>date</th>"
+    for row in data:
+        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td></tr><td>{row[4]}</td>"
+    html += "</table>"
+
+    return html
 
 @app.before_request
 def require_admin():

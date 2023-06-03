@@ -2,8 +2,9 @@ import tkinter as tk
 import requests
 import sqlite3
 from tkinter import *
+from datetime import datetime
 
-conn = sqlite3.connect("workers.db")
+conn = sqlite3.connect("workers.db")## to bdzie baza admina
 c = conn.cursor()
 
 c.execute('''CREATE TABLE IF NOT EXISTS workers
@@ -11,14 +12,23 @@ c.execute('''CREATE TABLE IF NOT EXISTS workers
 
 conn.commit()
 conn.close()
+##baza na logi
+conn = sqlite3.connect("logi.db")
+c = conn.cursor()
 
-def send_string_to_web_app(imie, nazwisko, idcard, sala):
+c.execute('''CREATE TABLE IF NOT EXISTS logi
+             (imie TEXT, nazwisko TEXT, idcard TEXT, sala TEXT,date DATETIME)''') ## dopisany typ SQL DATETIME
+
+conn.commit()
+conn.close()
+def send_string_to_web_app(imie, nazwisko, idcard, sala, date): ##data porownac z lementami w bazie
     url = 'http://localhost:8080'
     data = {
         'imie':imie,
         'nazwisko':nazwisko,
         'idcard': idcard,
         'sala': sala,
+        'date':date,
             }
     response = requests.post(url, data=data)
     print(response.text)
@@ -30,11 +40,12 @@ def pierwszyprzycisk():
         nazwisko =entrynazwisko.get()
         idcard = entryid.get()
         sala = entrysala.get()
-        send_string_to_web_app(imie, nazwisko,idcard, sala)
+        date =datetime.now()
+        send_string_to_web_app(imie, nazwisko,idcard, sala,date) ##dopisano date
 
-        conn = sqlite3.connect("workers.db")
-        c = conn.cursor()
-        c.execute("INSERT INTO workers (imie, nazwisko, idcard, sala) VALUES (?, ?, ?, ?)", (imie, nazwisko, idcard, sala))
+        conn = sqlite3.connect("logi.db") ##zamiana workers.db na logi
+        c = conn.cursor() ##linijka nizej dopisane date
+        c.execute("INSERT INTO logi (imie, nazwisko, idcard, sala, date) VALUES (?, ?, ?, ?, ?)", (imie, nazwisko, idcard, sala,date))
         conn.commit()
         conn.close()
 
