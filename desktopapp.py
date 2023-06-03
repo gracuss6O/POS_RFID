@@ -1,7 +1,5 @@
 import tkinter as tk
 import requests
-from tkinter import ttk
-from tkinter import messagebox
 import sqlite3
 from tkinter import *
 

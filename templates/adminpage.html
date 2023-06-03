@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Strona Administratora</title>
+</head>
+<body>
+    <h1>Strona Administratora</h1>
+    <table>
+        <tr>
+            <th>Imie</th>
+            <th>Nazwisko</th>
+            <th>Id karty</th>
+            <th>Sala</th>
+
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record[0] }}</td>
+            <td>{{ record[1] }}</td>
+            <td>{{ record[2] }}</td>
+            <td>{{ record[3] }}</td>
+            <td>
+
+                <form method="POST" action="/admin">
+                    <input type="hidden" name="action" value="delete">
+                     <input type="hidden" name="imie" value="{{ record[0] }}">
+                    <input type="hidden" name="nazwisko" value="{{ record[1] }}">
+                    <input type="hidden" name="idcard" value="{{ record[2] }}">
+                    <input type="hidden" name="sala" value="{{ record[3] }}">
+                    <button type="submit">Delete</button>
+                </form>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Dodaj nowego użytkownika</h2>
+    <form method="POST" action="/admin">
+        <input type="hidden" name="action" value="add">
+        <input type="text" name="imie" placeholder="imie">
+        <input type="text" name="nazwisko" placeholder="nazwisko">
+        <input type="hidden" name="idcard" placeholder="idcard">
+        <input type="hidden" name="sala" placeholder="sala">
+        <button type="submit">Add</button>
+    </form>
+    <h2>Dodaj nową kartę</h2>
+    <form method="POST" action="/admin">
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="imie" placeholder="imie">
+        <input type="hidden" name="nazwisko" placeholder="nazwisko">
+        <input type="text" name="idcard" placeholder="idcard">
+        <input type="hidden" name="sala" placeholder="sala">
+        <button type="submit">Add</button>
+    </form>
+    <h2>Dodaj nową salę</h2>
+    <form method="POST" action="/admin">
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="imie" placeholder="imie">
+        <input type="hidden" name="nazwisko" placeholder="nazwisko">
+        <input type="hidden" name="idcard" placeholder="idcard">
+        <input type="text" name="sala" placeholder="sala">
+        <button type="submit">Add</button>
+    </form>
+    <h2>Przypisz kartę do użytkownika</h2>
+    <form method="POST" action="/admin">
+        <input type="hidden" name="action" value="update">
+        <input type="text" name="imie" placeholder="imie">
+        <input type="text" name="nazwisko" placeholder="nazwisko">
+        <input type="text" name="idcard" placeholder="idcard">
+        <input type="hidden" name="sala" placeholder="sala">
+        <button type="submit">Add</button>
+    </form>
+    <h2>Przypisz karte do sali</h2>
+    <form method="POST" action="/admin">
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="imie" placeholder="">
+        <input type="hidden" name="nazwisko" placeholder="">
+        <input type="text" name="idcard" placeholder="idcard">
+        <input type="text" name="sala" placeholder="sala">
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
