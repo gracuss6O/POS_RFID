@@ -18,15 +18,27 @@ def index():
     conn.close()
 
     html = "<h1>Spis użytkowników przykładających kartę RFID do czytników.</h1>"
-    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th></tr>"
+    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th><th>Data godzina</th></tr>"
     for row in data:
-        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td></tr>"
+        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td><td>{row[4]}</td></tr>"
     html += "</table>"
 
     return html
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    """czyszczenie calej bazy logi, zastanowic sie czy potrzebne i czy umiescic gdzies indziej
+    conn = sqlite3.connect("logi.db")
+    c = conn.cursor()
+
+    c.execute('DELETE FROM logi;', );
+
+    conn.commit()
+    conn.close()
+    """
+
+
     conn = sqlite3.connect("workers.db")
     c = conn.cursor()
 
@@ -90,24 +102,6 @@ def admin_page():
 
     return render_template('adminpage.html', records=records)
 ##nowe zmiany, w logach widoczne tylko wpisy z desktopapp
-@app.route('/logi', methods=['GET', 'POST'])
-def logi():
-
-    conn = sqlite3.connect("logi.db")
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM logi")
-    data = c.fetchall()
-
-    conn.close()
-
-    html = "<h1> logi wprowadzonych kart RFID </h1>" ## dodane date
-    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th></tr><th>date</th>"
-    for row in data:
-        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td></tr><td>{row[4]}</td>"
-    html += "</table>"
-
-    return html
 
 @app.before_request
 def require_admin():

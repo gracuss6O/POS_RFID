@@ -60,8 +60,6 @@ def pierwszyprzycisk():
         conn.commit()
         conn.close()
 
-
-
         conn = sqlite3.connect("compare.db")
         c = conn.cursor()
         c.execute("INSERT INTO compare (imie, nazwisko, idcard, sala) VALUES (?, ?, ?, ?)",
