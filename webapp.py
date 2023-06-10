@@ -1,34 +1,44 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 
 import sqlite3
-from flask_login import UserMixin, login_manager, login_user, login_required, logout_user, current_user
+
 app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def base():
     return render_template('base.html')
 
-
-@app.route('/baza', methods=['GET', 'POST'])
+@app.route('/logi', methods=['GET', 'POST'])
 def index():
 
-    conn = sqlite3.connect("workers.db")
+    conn = sqlite3.connect("logi.db")# zmiana na logi
     c = conn.cursor()
 
-    c.execute("SELECT * FROM workers")
+    c.execute("SELECT * FROM logi")
     data = c.fetchall()
-
     conn.close()
 
-    html = "<h1>Baza danych wprowadzonych kart RFID </h1>"
-    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th></tr>"
+    html = "<h1>Spis użytkowników przykładających kartę RFID do czytników.</h1>"
+    html += "<table><tr><th>Imie</th><th>Nazwisko</th><th>ID</th><th>Sala</th><th>Data godzina</th></tr>"
     for row in data:
-        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td></tr>"
+        html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td><td>{row[4]}</td></tr>"
     html += "</table>"
 
     return html
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    """czyszczenie calej bazy logi, zastanowic sie czy potrzebne i czy umiescic gdzies indziej
+    conn = sqlite3.connect("logi.db")
+    c = conn.cursor()
+
+    c.execute('DELETE FROM logi;', );
+
+    conn.commit()
+    conn.close()
+    """
+
+
     conn = sqlite3.connect("workers.db")
     c = conn.cursor()
 
@@ -51,14 +61,15 @@ def login():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_page():
+    require_admin()
 
     if request.method == 'POST':
 
-        imie= request.form.get('imie')#0
-        nazwisko = request.form.get('nazwisko')#0
-        idcard = request.form.get('idcard')#0
-        sala = request.form.get('sala')#0
-        action = request.form.get('action')#0
+        imie= request.form.get('imie')
+        nazwisko = request.form.get('nazwisko')
+        idcard = request.form.get('idcard')
+        sala = request.form.get('sala')
+        action = request.form.get('action')
 
 
         if action == 'add':
@@ -90,6 +101,7 @@ def admin_page():
     conn.close()
 
     return render_template('adminpage.html', records=records)
+##nowe zmiany, w logach widoczne tylko wpisy z desktopapp
 
 @app.before_request
 def require_admin():

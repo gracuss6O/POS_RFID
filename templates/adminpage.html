@@ -34,50 +34,15 @@
         </tr>
         {% endfor %}
     </table>
-    <h2>Dodaj nowego użytkownika</h2>
+    <h2>Dodaj nowego użytkownika wraz z id karty i salą</h2>
     <form method="POST" action="/admin">
         <input type="hidden" name="action" value="add">
         <input type="text" name="imie" placeholder="imie">
         <input type="text" name="nazwisko" placeholder="nazwisko">
-        <input type="hidden" name="idcard" placeholder="idcard">
-        <input type="hidden" name="sala" placeholder="sala">
-        <button type="submit">Add</button>
-    </form>
-    <h2>Dodaj nową kartę</h2>
-    <form method="POST" action="/admin">
-        <input type="hidden" name="action" value="add">
-        <input type="hidden" name="imie" placeholder="imie">
-        <input type="hidden" name="nazwisko" placeholder="nazwisko">
-        <input type="text" name="idcard" placeholder="idcard">
-        <input type="hidden" name="sala" placeholder="sala">
-        <button type="submit">Add</button>
-    </form>
-    <h2>Dodaj nową salę</h2>
-    <form method="POST" action="/admin">
-        <input type="hidden" name="action" value="add">
-        <input type="hidden" name="imie" placeholder="imie">
-        <input type="hidden" name="nazwisko" placeholder="nazwisko">
-        <input type="hidden" name="idcard" placeholder="idcard">
-        <input type="text" name="sala" placeholder="sala">
-        <button type="submit">Add</button>
-    </form>
-    <h2>Przypisz kartę do użytkownika</h2>
-    <form method="POST" action="/admin">
-        <input type="hidden" name="action" value="update">
-        <input type="text" name="imie" placeholder="imie">
-        <input type="text" name="nazwisko" placeholder="nazwisko">
-        <input type="text" name="idcard" placeholder="idcard">
-        <input type="hidden" name="sala" placeholder="sala">
-        <button type="submit">Add</button>
-    </form>
-    <h2>Przypisz karte do sali</h2>
-    <form method="POST" action="/admin">
-        <input type="hidden" name="action" value="add">
-        <input type="hidden" name="imie" placeholder="">
-        <input type="hidden" name="nazwisko" placeholder="">
         <input type="text" name="idcard" placeholder="idcard">
         <input type="text" name="sala" placeholder="sala">
         <button type="submit">Add</button>
     </form>
+
 </body>
 </html>
