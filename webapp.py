@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify, session
 
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route('/', methods=['GET', 'POST'])
 def base():
     return render_template('base.html')
@@ -51,7 +52,10 @@ def login():
         login = request.form['login']
         password = request.form['password']
 
-        if login == 'admin' and password == 'haslo':
+        ##if login == 'admin' and password == 'haslo':
+        if request.form['login'] == 'admin' and request.form['password'] == 'haslo':
+            session['admin'] = request.form['login']
+
             return redirect('/admin')
         else:
             error = 'Invalid login or password'
@@ -61,10 +65,12 @@ def login():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_page():
-    require_admin()
+    ##require_admin()
 
-    if request.method == 'POST':
-
+   ## if request.method == 'POST':
+    if 'admin' not in session:
+        return redirect(url_for('login'))
+    else:
         imie= request.form.get('imie')
         nazwisko = request.form.get('nazwisko')
         idcard = request.form.get('idcard')
